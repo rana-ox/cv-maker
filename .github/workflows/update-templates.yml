@@ -1,0 +1,45 @@
+name: Update CV Templates JSON
+
+on:
+  push:
+    paths:
+      - 'cv/*.html' 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate templates.json
+        run: |
+          echo "[" > cv/templates.json
+          first=true
+          for file in cv/*.html; do
+            if [[ "$file" == "cv/index.html" ]]; then continue; fi
+            
+            filename=$(basename "$file")
+            title=$(echo "${filename%.*}" | sed 's/.*/\L&/; s/./\U&/')
+            
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> cv/templates.json
+            fi
+            
+            # Updated to point to cv/ folder
+            echo "  {\"id\": \"${filename%.*}\", \"title\": \"$title\", \"file\": \"cv/$filename\"}" >> cv/templates.json
+          done
+          echo "]" >> cv/templates.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add cv/templates.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "docs: auto-update templates.json" && git push)
