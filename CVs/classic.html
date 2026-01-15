@@ -1,0 +1,227 @@
+<!-- CVs/classic.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classic CV</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fff;--ink:#1f2430;--muted:#6b7280;--line:#e6e3dc;--accent:#2f5d62}
+  *{box-sizing:border-box} body{margin:0;background:#f7f6f3;color:var(--ink);font-family:Inter,Arial}
+  .wrap{max-width:1000px;margin:0 auto;padding:20px}
+  .cv{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  header{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:20px;border-bottom:2px solid var(--line)}
+  .avatar{width:120px;height:120px;border-radius:50%;border:1px solid var(--line);overflow:hidden;background:#eee}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:none}
+  h1{font-family:Playfair Display,serif;margin:0 0 6px}
+  .subtitle{color:var(--muted)}
+  .meta{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:14px;margin-top:8px}
+  section{padding:20px;border-bottom:1px solid var(--line)}
+  section:last-child{border-bottom:0}
+  h2{font-family:Playfair Display,serif;margin:0 0 10px;border-bottom:2px solid var(--line);padding-bottom:6px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .item h3{margin:0 0 4px}
+  .role{color:var(--muted);margin-bottom:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:#fbfaf7}
+  .toolbar{display:flex;gap:10px}
+  .btn{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer}
+  .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.35)}
+  .overlay.show{display:grid}
+  .box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  form .group{margin-bottom:12px}
+  form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .entry{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fbfaf7}
+  input,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cv" id="cv">
+    <header>
+      <div class="avatar"><img id="cvPhoto" alt=""></div>
+      <div>
+        <h1 id="cvName">Your Name</h1>
+        <div class="subtitle" id="cvRole">Your Role</div>
+        <div class="meta" id="cvMeta">
+          <span id="cvLocation">Location</span>
+          <span id="cvEmail">Email</span>
+          <span id="cvPhone"></span>
+          <span id="cvWebsite"></span>
+          <span id="cvLinkedIn"></span>
+          <span id="cvGitHub"></span>
+        </div>
+        <div class="toolbar" style="margin-top:10px">
+          <button class="btn" id="downloadBtn">⬇️ Download PDF</button>
+        </div>
+      </div>
+    </header>
+    <section>
+      <h2>Professional Summary</h2>
+      <p id="cvSummary">Write a concise summary.</p>
+    </section>
+    <section>
+      <h2>Experience</h2>
+      <div class="grid" id="cvExperience"></div>
+    </section>
+    <section>
+      <h2>Education</h2>
+      <div class="grid" id="cvEducation"></div>
+    </section>
+    <section>
+      <h2>Skills</h2>
+      <div class="chips" id="cvSkills"></div>
+    </section>
+    <section>
+      <h2>Projects</h2>
+      <div class="grid" id="cvProjects"></div>
+    </section>
+    <section>
+      <h2>Contact</h2>
+      <div class="meta" id="cvContact"></div>
+    </section>
+  </div>
+
+  <form id="cvForm" style="margin-top:16px">
+    <div class="group"><label>Full name</label><input name="name" placeholder="Your Name" required></div>
+    <div class="row">
+      <div class="group"><label>Role</label><input name="role" placeholder="Front‑End Developer" required></div>
+      <div class="group"><label>Location</label><input name="location" placeholder="Lahore, Pakistan" required></div>
+    </div>
+    <div class="row">
+      <div class="group"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required></div>
+      <div class="group"><label>Phone</label><input name="phone" placeholder="+92 300 0000000"></div>
+    </div>
+    <div class="row">
+      <div class="group"><label>Website</label><input type="url" name="website" placeholder="https://yourportfolio.com"></div>
+      <div class="group"><label>LinkedIn</label><input type="url" name="linkedin" placeholder="https://linkedin.com/in/yourname"></div>
+    </div>
+    <div class="group"><label>GitHub</label><input type="url" name="github" placeholder="https://github.com/yourhandle"></div>
+    <div class="group"><label>Photo URL</label><input type="url" name="photo" placeholder="https://example.com/photo.jpg"></div>
+    <div class="group"><label>Summary</label><textarea name="summary" rows="3" required></textarea></div>
+
+    <div class="group">
+      <label>Experience</label>
+      <div id="experienceFields"></div>
+      <button type="button" class="btn" id="addExperience">➕ Add Experience</button>
+    </div>
+    <div class="group">
+      <label>Education</label>
+      <div id="educationFields"></div>
+      <button type="button" class="btn" id="addEducation">➕ Add Education</button>
+    </div>
+    <div class="group">
+      <label>Projects</label>
+      <div id="projectFields"></div>
+      <button type="button" class="btn" id="addProject">➕ Add Project</button>
+    </div>
+    <div class="group"><label>Skills (comma‑separated)</label><input name="skills" placeholder="HTML, CSS, JS" required></div>
+
+    <div style="display:flex;gap:10px">
+      <button type="button" class="btn" id="previewBtn">👁️ Preview</button>
+      <button type="submit" class="btn">✅ Generate PDF</button>
+    </div>
+  </form>
+</div>
+
+<div class="overlay" id="overlay"><div class="box">Generating PDF…</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const el = id => document.getElementById(id);
+  const setText = (id, v) => el(id).textContent = v || '';
+  function collect(containerId){
+    const blocks = document.querySelectorAll('#'+containerId+' .entry');
+    const out = [];
+    blocks.forEach(b=>{
+      const title=b.querySelector('.title').value.trim();
+      const org=b.querySelector('.org').value.trim();
+      const period=b.querySelector('.period').value.trim();
+      const place=b.querySelector('.place').value.trim();
+      const bullets=b.querySelector('.bullets').value.split('\n').map(s=>s.trim()).filter(Boolean);
+      out.push({title,org,period,place,bullets});
+    });
+    return out;
+  }
+  function renderList(containerId, items){
+    const c = el(containerId); c.innerHTML='';
+    items.forEach(it=>{
+      const div=document.createElement('div'); div.className='item';
+      div.innerHTML = `<h3>${it.title||''}</h3><div class="role">${[it.org,it.period,it.place].filter(Boolean).join(' • ')}</div>`;
+      const ul=document.createElement('ul');
+      (it.bullets||[]).forEach(b=>{const li=document.createElement('li');li.textContent=b;ul.appendChild(li);});
+      if(ul.children.length) div.appendChild(ul);
+      c.appendChild(div);
+    });
+  }
+  function renderChips(id, csv){
+    const c = el(id); c.innerHTML='';
+    csv.split(',').map(s=>s.trim()).filter(Boolean).forEach(s=>{
+      const chip=document.createElement('span'); chip.className='chip'; chip.textContent=s; c.appendChild(chip);
+    });
+  }
+  function render(){
+    const f = document.getElementById('cvForm');
+    const data = {
+      name:f.name.value.trim(), role:f.role.value.trim(), location:f.location.value.trim(),
+      email:f.email.value.trim(), phone:f.phone.value.trim(), website:f.website.value.trim(),
+      linkedin:f.linkedin.value.trim(), github:f.github.value.trim(), photo:f.photo.value.trim(),
+      summary:f.summary.value.trim(), skills:f.skills.value.trim(),
+      experience:collect('experienceFields'), education:collect('educationFields'), projects:collect('projectFields')
+    };
+    setText('cvName', data.name||'Your Name'); setText('cvRole', data.role||'Your Role');
+    const img = document.querySelector('#cvPhoto');
+    if(data.photo){ img.src=data.photo; img.style.display='block'; } else { img.removeAttribute('src'); img.style.display='none'; }
+    setText('cvLocation', data.location); setText('cvEmail', data.email); setText('cvPhone', data.phone);
+    setText('cvWebsite', data.website); setText('cvLinkedIn', data.linkedin); setText('cvGitHub', data.github);
+    setText('cvSummary', data.summary||'Write a concise summary.');
+    renderList('cvExperience', data.experience); renderList('cvEducation', data.education); renderList('cvProjects', data.projects);
+    renderChips('cvSkills', data.skills);
+    const contact=[]; if(data.email)contact.push('📧 '+data.email); if(data.phone)contact.push('📞 '+data.phone);
+    if(data.location)contact.push('📍 '+data.location); if(data.website)contact.push('🌐 '+data.website);
+    if(data.linkedin)contact.push('🔗 '+data.linkedin); if(data.github)contact.push('🐙 '+data.github);
+    el('cvContact').innerHTML = contact.map(x=>`<span>${x}</span>`).join('');
+  }
+  function entryHTML(type){
+    const orgLabel = type==='education'?'School':(type==='projects'?'Role':'Company');
+    const titleLabel = type==='projects'?'Project name':'Title';
+    return `<div class="entry">
+      <div class="row">
+        <div class="group"><label>${titleLabel}</label><input class="title" placeholder="${type==='projects'?'Portfolio Website':'Front‑End Developer'}" required></div>
+        <div class="group"><label>${orgLabel}</label><input class="org" placeholder="${type==='education'?'University of Punjab':(type==='projects'?'Design & Development':'Independent')}" required></div>
+      </div>
+      <div class="row">
+        <div class="group"><label>Period</label><input class="period" placeholder="2023–Present" required></div>
+        <div class="group"><label>Location (optional)</label><input class="place" placeholder="Lahore, Pakistan"></div>
+      </div>
+      <div class="group"><label>${type==='projects'?'Highlights':'Responsibilities / Achievements'} (one per line)</label><textarea class="bullets" rows="3"></textarea></div>
+      <button type="button" class="btn" onclick="this.parentElement.remove()">🗑 Remove</button>
+    </div>`;
+  }
+  document.getElementById('addExperience').addEventListener('click',()=>document.getElementById('experienceFields').insertAdjacentHTML('beforeend',entryHTML('experience')));
+  document.getElementById('addEducation').addEventListener('click',()=>document.getElementById('educationFields').insertAdjacentHTML('beforeend',entryHTML('education')));
+  document.getElementById('addProject').addEventListener('click',()=>document.getElementById('projectFields').insertAdjacentHTML('beforeend',entryHTML('projects')));
+  document.getElementById('previewBtn').addEventListener('click',render);
+  let t; document.getElementById('cvForm').addEventListener('input',()=>{clearTimeout(t); t=setTimeout(render,200);});
+  const overlay = document.getElementById('overlay');
+  async function generatePDF(){
+    overlay.classList.add('show'); await new Promise(r=>setTimeout(r,250));
+    const node = document.getElementById('cv'); const canvas = await html2canvas(node,{scale:2,backgroundColor:null});
+    const img = canvas.toDataURL('image/png'); const { jsPDF } = window.jspdf; const pdf = new jsPDF('p','pt','a4');
+    const w = pdf.internal.pageSize.getWidth(); const h = canvas.height * (w / canvas.width);
+    if(h<=pdf.internal.pageSize.getHeight()){ pdf.addImage(img,'PNG',0,0,w,h); }
+    else { let pos=0, remain=h; while(remain>0){ pdf.addImage(img,'PNG',0,-pos,w,h,'','FAST'); remain -= pdf.internal.pageSize.getHeight(); pos += pdf.internal.pageSize.getHeight(); if(remain>0) pdf.addPage(); } }
+    pdf.save(`CV_${(document.getElementById('cvName').textContent||'YourName').replace(/\s+/g,'_')}.pdf`);
+    overlay.classList.remove('show');
+  }
+  document.getElementById('cvForm').addEventListener('submit',async e=>{e.preventDefault(); render(); await generatePDF();});
+  document.getElementById('downloadBtn').addEventListener('click',async()=>{render(); await generatePDF();});
+  // Defaults
+  document.getElementById('experienceFields').insertAdjacentHTML('beforeend',entryHTML('experience'));
+  document.getElementById('educationFields').insertAdjacentHTML('beforeend',entryHTML('education'));
+  document.getElementById('projectFields').insertAdjacentHTML('beforeend',entryHTML('projects'));
+  render();
+</script>
+</body>
+</html>
