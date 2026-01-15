@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Premium CV Templates</title>
+<title>Premium CV Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -34,8 +34,6 @@
   .body{padding:14px 16px}
   .body h3{margin:0 0 6px;font-weight:700}
   .body p{margin:0;color:var(--muted);font-size:14px}
-  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .tag{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f2efe8)}
   .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);z-index:999;animation:fadeIn .3s ease}
   .modal.show{display:grid}
   .sheet{width:min(1200px,92vw);height:min(92vh,900px);background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr}
@@ -116,4 +114,14 @@
       grid.innerHTML = '';
       list.forEach(t => {
         const card = document.createElement('div');
-        card.className = 'card
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb">
+            <div class="mini">
+              <div class="bar"></div>
+              <div class="title"></div>
+              <div class="line l1"></div><div class="line l2"></div><div class="line l3"></div>
+            </div>
+          </div>
+          <div class="body">
+            <h3>${t.title}</h3
