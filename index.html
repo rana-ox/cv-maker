@@ -1,36 +1,33 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dynamic CV Templates — Index</title>
+<title>Premium CV Templates</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#0f1216; --paper:#14181f; --ink:#eaeef5; --muted:#a3a9b7; --line:#1f2430;
-    --brand:#7cc5ff; --radius:14px; --shadow:0 12px 30px rgba(0,0,0,0.35);
+    --bg:#0e1117; --paper:#161b22; --ink:#e6edf3; --muted:#8b949e; --line:#30363d;
+    --brand:#58a6ff; --radius:16px; --shadow:0 12px 30px rgba(0,0,0,0.35);
   }
   [data-theme="light"] {
-    --bg:#f7f6f3; --paper:#ffffff; --ink:#1f2430; --muted:#6b7280; --line:#e6e3dc;
-    --brand:#2f5d62; --shadow:0 12px 30px rgba(31,36,48,0.12);
+    --bg:#f6f8fa; --paper:#ffffff; --ink:#1f2328; --muted:#6b7280; --line:#d0d7de;
+    --brand:#0969da; --shadow:0 12px 30px rgba(31,36,48,0.12);
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Arial}
-  header{position:sticky;top:0;background:rgba(0,0,0,0.25);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+  header{position:sticky;top:0;background:rgba(20,24,31,0.65);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10}
   .wrap{max-width:1200px;margin:0 auto;padding:18px 24px}
   .bar{display:flex;align-items:center;justify-content:space-between}
-  .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-  @media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
-  @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
-  .card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,0.45)}
-  .thumb{height:160px;background:linear-gradient(180deg, rgba(124,197,255,0.08), transparent 60%);display:grid;place-items:center}
-  .mini{width:88%;height:70%;border-radius:10px;border:1px solid var(--line);background:linear-gradient(135deg,#ffffff10,#00000010);position:relative}
+  .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);transition:all .2s}
+  .btn:hover{background:var(--brand);color:#fff}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:20px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s ease, box-shadow .2s ease}
+  .card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.45)}
+  .thumb{height:160px;background:linear-gradient(135deg,rgba(88,166,255,0.25),transparent 70%);display:grid;place-items:center}
+  .mini{width:85%;height:70%;border-radius:12px;border:1px solid var(--line);background:linear-gradient(135deg,#ffffff10,#00000010);position:relative}
   .mini .bar{position:absolute;top:0;left:0;right:0;height:24px;border-bottom:1px solid var(--line)}
-  .mini .title{position:absolute;top:36px;left:12px;right:12px;height:14px;border-radius:6px;background:rgba(124,197,255,0.35)}
+  .mini .title{position:absolute;top:36px;left:12px;right:12px;height:14px;border-radius:6px;background:rgba(88,166,255,0.35)}
   .mini .line{position:absolute;left:12px;right:12px;height:1px;background:var(--line)}
   .mini .l1{top:70px}.mini .l2{top:96px}.mini .l3{top:122px}
   .body{padding:14px 16px}
@@ -38,11 +35,16 @@
   .body p{margin:0;color:var(--muted);font-size:14px}
   .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .tag{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f2efe8)}
-  .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);z-index:999}
+  .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);z-index:999;animation:fadeIn .3s ease}
   .modal.show{display:grid}
   .sheet{width:min(1200px,92vw);height:min(92vh,900px);background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr}
   .sheet header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}
   iframe{width:100%;height:100%;border:0;background:var(--paper)}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  /* Fun loading effect */
+  .loader{display:grid;place-items:center;height:200px}
+  .orb{width:60px;height:60px;border-radius:50%;background:conic-gradient(var(--brand),transparent);animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -51,7 +53,7 @@
     <h1 style="margin:0;font-family:Playfair Display,serif">CV Builder</h1>
     <div style="display:flex;gap:10px">
       <button class="btn" id="themeToggle">🌓 Theme</button>
-      <button class="btn" id="reloadBtn">🔄 Reload templates</button>
+      <button class="btn" id="reloadBtn">🔄 Reload</button>
     </div>
   </div>
 </header>
@@ -59,7 +61,7 @@
 <section class="wrap" style="margin-top:18px">
   <div style="margin-bottom:12px">
     <h2 style="margin:0 0 6px">Templates</h2>
-    <p style="margin:0;color:var(--muted)">Auto‑listed from CVs/templates.json. Click to open and edit.</p>
+    <p style="margin:0;color:var(--muted)">Auto‑listed from CVs/templates.json. Click to preview.</p>
   </div>
   <div id="grid" class="grid"></div>
 </section>
@@ -94,12 +96,13 @@
     frame.src = '';
   });
 
-  // Load templates from manifest
+  // Load templates with fun loader
   async function loadTemplates() {
     const grid = document.getElementById('grid');
-    grid.innerHTML = '<div style="color:var(--muted)">Loading…</div>';
+    grid.innerHTML = '<div class="loader"><div class="orb"></div></div>';
     try {
-      const res = await fetch('CVs/templates.json', { cache: 'no-store' });
+      const res = await fetch('./CVs/templates.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const list = await res.json();
       grid.innerHTML = '';
       list.forEach(t => {
@@ -109,29 +112,11 @@
           <div class="thumb">
             <div class="mini">
               <div class="bar"></div>
-              <div class="title" style="background:${t.color || 'rgba(124,197,255,0.35)'}"></div>
+              <div class="title" style="background:${t.color || 'rgba(88,166,255,0.35)'}"></div>
               <div class="line l1"></div><div class="line l2"></div><div class="line l3"></div>
             </div>
           </div>
           <div class="body">
             <h3>${t.title}</h3>
             <p>${t.desc || ''}</p>
-            <div class="tags">${(t.tags || []).map(x=>`<span class="tag">${x}</span>`).join('')}</div>
-          </div>`;
-        card.addEventListener('click', () => {
-          modalTitle.textContent = t.title;
-          frame.src = t.file;
-          modal.classList.add('show');
-        });
-        grid.appendChild(card);
-      });
-    } catch (e) {
-      grid.innerHTML = '<div style="color:var(--muted)">Failed to load templates.json</div>';
-    }
-  }
-
-  document.getElementById('reloadBtn').addEventListener('click', loadTemplates);
-  loadTemplates();
-</script>
-</body>
-</html>
+            <div class="tags">${(t.tags || []).map(x
