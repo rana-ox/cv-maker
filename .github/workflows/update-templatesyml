@@ -1,0 +1,38 @@
+name: Update templates.json
+
+on:
+  push:
+    paths:
+      - "CVs/*.html"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # allow workflow to push changes
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate templates.json
+        run: |
+          echo "[" > CVs/templates.json
+          first=true
+          for f in CVs/*.html; do
+            fname=$(basename "$f" .html)
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> CVs/templates.json
+            fi
+            echo "  {\"id\":\"$fname\",\"title\":\"${fname^}\",\"file\":\"CVs/$fname.html\"}" >> CVs/templates.json
+          done
+          echo "]" >> CVs/templates.json
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CVs/templates.json
+          git commit -m "Auto-update templates.json" || echo "No changes to commit"
+          git push
