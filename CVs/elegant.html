@@ -1,0 +1,86 @@
+<!-- CVs/elegant.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elegant CV</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fff;--ink:#1f2430;--muted:#6b7280;--line:#e6e3dc;--accent:#8b6fb3}
+  *{box-sizing:border-box} body{margin:0;background:#f6f3fb;color:var(--ink);font-family:Inter,Arial}
+  .wrap{max-width:1000px;margin:0 auto;padding:20px}
+  .cv{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  header{display:grid;grid-template-columns:120px 1fr auto;gap:18px;padding:20px;border-bottom:1px dashed var(--accent);background:linear-gradient(180deg,#f2ecff,#ffffff)}
+  .avatar{width:120px;height:120px;border-radius:50%;border:1px solid var(--line);overflow:hidden;background:#efe9ff}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:none}
+  h1{margin:0 0 6px;font-family:Playfair Display,serif}
+  .subtitle{color:var(--accent);font-weight:600}
+  .meta{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:14px;margin-top:8px}
+  .btn{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer}
+  section{padding:20px;border-bottom:1px dashed var(--line)} section:last-child{border-bottom:0}
+  h2{margin:0 0 10px;color:var(--accent);border-bottom:1px dashed var(--accent);padding-bottom:6px;font-family:Playfair Display,serif}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .item h3{margin:0 0 4px} .role{color:var(--muted);margin-bottom:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px} .chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:#f7f2ff}
+  form .group{margin-bottom:12px} form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .entry{border:1px dashed var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#f9f6ff}
+  input,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
+  .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.35)} .overlay.show{display:grid}
+  .box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cv" id="cv">
+    <header>
+      <div class="avatar"><img id="cvPhoto" alt=""></div>
+      <div>
+        <h1 id="cvName">Your Name</h1>
+        <div class="subtitle" id="cvRole">Your Role</div>
+        <div class="meta" id="cvMeta"><span id="cvLocation">Location</span><span id="cvEmail">Email</span><span id="cvPhone"></span><span id="cvWebsite"></span><span id="cvLinkedIn"></span><span id="cvGitHub"></span></div>
+      </div>
+      <div><button class="btn" id="downloadBtn">⬇️ Download PDF</button></div>
+    </header>
+    <section><h2>Professional Summary</h2><p id="cvSummary">Write a concise summary.</p></section>
+    <section><h2>Experience</h2><div class="grid" id="cvExperience"></div></section>
+    <section><h2>Education</h2><div class="grid" id="cvEducation"></div></section>
+    <section><h2>Skills</h2><div class="chips" id="cvSkills"></div></section>
+    <section><h2>Projects</h2><div class="grid" id="cvProjects"></div></section>
+    <section><h2>Contact</h2><div class="meta" id="cvContact"></div></section>
+  </div>
+
+  <form id="cvForm" style="margin-top:16px">
+    <div class="group"><label>Full name</label><input name="name" required></div>
+    <div class="row"><div class="group"><label>Role</label><input name="role" required></div><div class="group"><label>Location</label><input name="location" required></div></div>
+    <div class="row"><div class="group"><label>Email</label><input type="email" name="email" required></div><div class="group"><label>Phone</label><input name="phone"></div></div>
+    <div class="row"><div class="group"><label>Website</label><input type="url" name="website"></div><div class="group"><label>LinkedIn</label><input type="url" name="linkedin"></div></div>
+    <div class="group"><label>GitHub</label><input type="url" name="github"></div>
+    <div class="group"><label>Photo URL</label><input type="url" name="photo"></div>
+    <div class="group"><label>Summary</label><textarea name="summary" rows="3" required></textarea></div>
+    <div class="group"><label>Experience</label><div id="experienceFields"></div><button type="button" class="btn" id="addExperience">➕ Add Experience</button></div>
+    <div class="group"><label>Education</label><div id="educationFields"></div><button type="button" class="btn" id="addEducation">➕ Add Education</button></div>
+    <div class="group"><label>Projects</label><div id="projectFields"></div><button type="button" class="btn" id="addProject">➕ Add Project</button></div>
+    <div class="group"><label>Skills (comma‑separated)</label><input name="skills" required></div>
+    <div style="display:flex;gap:10px"><button type="button" class="btn" id="previewBtn">👁️ Preview</button><button type="submit" class="btn">✅ Generate PDF</button></div>
+  </form>
+</div>
+<div class="overlay" id="overlay"><div class="box">Generating PDF…</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const el=id=>document.getElementById(id); const set=(id,v)=>el(id).textContent=v||'';
+  function collect(id){const blocks=document.querySelectorAll('#'+id+' .entry');const out=[];blocks.forEach(b=>{const t=b.querySelector('.title').value.trim();const o=b.querySelector('.org').value.trim();const p=b.querySelector('.period').value.trim();const pl=b.querySelector('.place').value.trim();const bullets=b.querySelector('.bullets').value.split('\n').map(s=>s.trim()).filter(Boolean);out.push({title:t,org:o,period:p,place:pl,bullets});});return out;}
+  function list(id,items){const c=el(id);c.innerHTML='';items.forEach(it=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<h3>${it.title||''}</h3><div class="role">${[it.org,it.period,it.place].filter(Boolean).join(' • ')}</div>`;const ul=document.createElement('ul');(it.bullets||[]).forEach(b=>{const li=document.createElement('li');li.textContent=b;ul.appendChild(li);});if(ul.children.length)d.appendChild(ul);c.appendChild(d);});}
+  function chips(id,csv){const c=el(id);c.innerHTML='';csv.split(',').map(s=>s.trim()).filter(Boolean).forEach(s=>{const chip=document.createElement('span');chip.className='chip';chip.textContent=s;c.appendChild(chip);});}
+  function render(){const f=document.getElementById('cvForm');const d={name:f.name.value.trim(),role:f.role.value.trim(),location:f.location.value.trim(),email:f.email.value.trim(),phone:f.phone.value.trim(),website:f.website.value.trim(),linkedin:f.linkedin.value.trim(),github:f.github.value.trim(),photo:f.photo.value.trim(),summary:f.summary.value.trim(),skills:f.skills.value.trim(),experience:collect('experienceFields'),education:collect('educationFields'),projects:collect('projectFields')};set('cvName',d.name||'Your Name');set('cvRole',d.role||'Your Role');const img=document.querySelector('#cvPhoto');if(d.photo){img.src=d.photo;img.style.display='block';}else{img.removeAttribute('src');img.style.display='none';}set('cvLocation',d.location);set('cvEmail',d.email);set('cvPhone',d.phone);set('cvWebsite',d.website);set('cvLinkedIn',d.linkedin);set('cvGitHub',d.github);set('cvSummary',d.summary||'Write a concise summary.');list('cvExperience',d.experience);list('cvEducation',d.education);list('cvProjects',d.projects);chips('cvSkills',d.skills);const contact=[];if(d.email)contact.push('📧 '+d.email);if(d.phone)contact.push('📞 '+d.phone);if(d.location)contact.push('📍 '+d.location);if(d.website)contact.push('🌐 '+d.website);if(d.linkedin)contact.push('🔗 '+d.linkedin);if(d.github)contact.push('🐙 '+d.github);el('cvContact').innerHTML=contact.map(x=>`<span>${x}</span>`).join('');}
+  function entry(type){const org=type==='education'?'School':(type==='projects'?'Role':'Company');const title=type==='projects'?'Project name':'Title';return `<div class="entry"><div class="row"><div class="group"><label>${title}</label><input class="title" required></div><div class="group"><label>${org}</label><input class="org" required></div></div><div class="row"><div class="group"><label>Period</label><input class="period" required></div><div class="group"><label>Location (optional)</label><input class="place"></div></div><div class="group"><label>${type==='projects'?'Highlights':'Responsibilities / Achievements'} (one per line)</label><textarea class="bullets" rows="3"></textarea></div><button type="button" class="btn" onclick="this.parentElement.remove()">🗑 Remove</button></div>`;}
+  document.getElementById('addExperience').addEventListener('click',()=>document.getElementById('experienceFields').insertAdjacentHTML('beforeend',entry('experience')));
+  document.getElementById('addEducation').addEventListener('click',()=>document.getElementById('educationFields').insertAdjacentHTML('beforeend',entry('education')));
+  document.getElementById('addProject').addEventListener('click',()=>document.getElementById('projectFields').insertAdjacentHTML('beforeend',entry('projects')));
+  document.getElementById('previewBtn').addEventListener('click',render); let t; document.getElementById('cvForm').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(render,200);});
+  const overlay=el('overlay'); async function pdf(){overlay.classList.add('show');await new Promise(r=>setTimeout(r,250));const node=el('cv');const canvas=await html2canvas(node,{scale:2,backgroundColor:null});const img=canvas.toDataURL('image/png');const {jsPDF}=window.jspdf;const pdf=new jsPDF('p','pt','a4');const w=pdf.internal.pageSize.getWidth();const h=canvas.height*(w/canvas.width);if(h<=pdf.internal.pageSize.getHeight()){pdf.addImage(img,'PNG',0,0,w,h);}else{let pos=0,remain=h;while(remain>0){pdf.addImage(img,'PNG',0,-pos,w,h,'','FAST');remain-=pdf.internal.pageSize.getHeight();pos+=pdf.internal.pageSize.getHeight();if(remain>0)pdf.addPage();}}pdf.save(`CV_${(el('cvName').textContent||'YourName').replace(/\s+/g,'_')}.pdf`);overlay.classList.remove('show');}
+  document.getElementById('cvForm').addEventListener('submit',async e=>{e.preventDefault();render();await pdf();}); document.getElementById('downloadBtn').addEventListener('click',async()=>{render();await pdf();});
+  document.getElementById('experienceFields').insertAdjacentHTML('beforeend',entry('experience')); document.getElementById('educationFields').insertAdjacentHTML('beforeend',entry('education')); document.getElementById('projectFields').insertAdjacentHTML('beforeend',entry('projects')); render();
+</script>
+</body>
+</html>

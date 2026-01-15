@@ -1,0 +1,7 @@
+// CVs/templates.json
+[
+  { "id": "classic", "title": "Classic", "file": "CVs/classic.html", "desc": "Serif headings, structured sections", "tags": ["Serif","Structured","Professional"], "color": "rgba(124,197,255,0.45)" },
+  { "id": "modern",  "title": "Modern",  "file": "CVs/modern.html",  "desc": "Bold accents, clean sans-serif", "tags": ["Sans-serif","Bold","Contemporary"], "color": "rgba(124,197,255,0.55)" },
+  { "id": "minimal", "title": "Minimal", "file": "CVs/minimal.html", "desc": "Whitespace, quiet elegance", "tags": ["Minimal","Whitespace","Elegant"], "color": "rgba(160,160,160,0.45)" },
+  { "id": "elegant", "title": "Elegant", "file": "CVs/elegant.html", "desc": "Editorial polish, soft color", "tags": ["Editorial","Soft","Polished"], "color": "rgba(196,167,231,0.55)" }
+]
